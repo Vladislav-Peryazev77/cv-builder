@@ -1,0 +1,1 @@
+export { WordExpForm } from "./WordExpForm";

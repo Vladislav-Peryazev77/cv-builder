@@ -1,0 +1,1 @@
+export { PersInfoForm } from "./PersInfoForm";

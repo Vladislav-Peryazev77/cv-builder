@@ -1,0 +1,1 @@
+export { CVInfoCard } from "./CVInfoCard";
