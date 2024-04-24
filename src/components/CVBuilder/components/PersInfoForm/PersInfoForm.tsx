@@ -12,6 +12,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import PersInfoFormStore from "../../../../stores/PersInfoFormStore";
+import { useMask } from "@react-input/mask";
 
 export interface PersInfoForm {
   name: string;
@@ -37,13 +38,7 @@ const schema = yup.object({
       /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/,
       "Enter your email in the format - ivan@mail.com"
     ),
-  phoneNumber: yup
-    .string()
-    .required("Phone number is required")
-    .matches(
-      /^(7|8)9\d{9}$/,
-      "Enter your phone number in format - 88005553535 or 79537885679"
-    ),
+  phoneNumber: yup.string().required("Phone number is required"),
   location: yup
     .string()
     .required("Location is required")
@@ -54,18 +49,30 @@ const schema = yup.object({
 });
 
 export const PersInfoForm = observer(() => {
+  const { handlePersInfoFormValueSumbit } = PersInfoFormStore;
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<PersInfoForm>({
     resolver: yupResolver(schema),
   });
 
-  const { handlePersInfoFormValueSumbit } = PersInfoFormStore;
+  const inputPhoneNumberRef = useMask({
+    mask: "+7 (___) ___-__-__",
+    replacement: { _: /\d/ },
+    showMask: true,
+  });
 
   const onSubmit: SubmitHandler<PersInfoForm> = (values) => {
-    handlePersInfoFormValueSumbit(values);
+    const phoneNumber = values.phoneNumber.replace(/[\s()-]/g, "");
+    handlePersInfoFormValueSumbit({ ...values, phoneNumber });
+  };
+
+  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue("phoneNumber", e.target.value);
   };
 
   return (
@@ -95,7 +102,12 @@ export const PersInfoForm = observer(() => {
           </FormLabel>
           <FormLabel>
             Phone number
-            <Input {...register("phoneNumber")} placeholder="Phone number" />
+            <Input
+              {...register("phoneNumber")}
+              placeholder="Phone number"
+              onChange={handlePhoneNumberChange}
+              ref={inputPhoneNumberRef}
+            />
             <Text color="red">{errors.phoneNumber?.message}</Text>
           </FormLabel>
           <FormLabel>
