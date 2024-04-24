@@ -9,7 +9,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { SubmitHandler, useForm } from "react-hook-form";
-// import { useMask } from "@react-input/mask";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import EducationFromStore from "../../../../stores/EducationFormStore";
@@ -51,16 +50,6 @@ const schema = yup.object({
 });
 
 export const EducationForm = observer(() => {
-  // const inputStartDataRef = useMask({
-  //   mask: "dd/mm/yyyy",
-  //   replacement: { d: /\d/, m: /\d/, y: /\d/ },
-  // });
-
-  // const inputEndDataRef = useMask({
-  //   mask: "dd/mm/yyyy",
-  //   replacement: { d: /\d/, m: /\d/, y: /\d/ },
-  // });
-
   const {
     register,
     handleSubmit,
@@ -110,20 +99,12 @@ export const EducationForm = observer(() => {
           </FormLabel>
           <FormLabel>
             Start Date
-            <Input
-              {...register("educationStartDate")}
-              placeholder="dd/mm/yy"
-              // ref={inputStartDataRef}
-            />
+            <Input {...register("educationStartDate")} placeholder="dd/mm/yy" />
             <Text color="red">{errors.educationStartDate?.message}</Text>
           </FormLabel>
           <FormLabel>
             End Date
-            <Input
-              {...register("educationEndDate")}
-              placeholder="dd/mm/yy"
-              // ref={inputEndDataRef}
-            />
+            <Input {...register("educationEndDate")} placeholder="dd/mm/yy" />
             <Text color="red">{errors.educationEndDate?.message}</Text>
           </FormLabel>
           <FormLabel>
